@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getResources, getStatus } from 'redux-resource';
 import List from './List';
-import { readPeople } from '../redux/actions/people';
+import { readPeople, deletePerson } from '../redux/actions/people';
 
 const peopleSelector = people => {
     console.log('getting people items');
@@ -31,14 +31,24 @@ function useGetPeople() {
     }));
 }
 
+function useDeletePerson() {
+    const dispatch = useDispatch();
+
+    return useCallback((item) => {
+        dispatch(deletePerson(item.id));
+    }, [dispatch]);
+}
+
 const People = () => {
     const { items, status } = useGetPeople();
+    const handleDelete = useDeletePerson();
 
     return (
         <List
             title="People"
             items={items}
             status={status}
+            onDelete={handleDelete}
         />
     );
 };
