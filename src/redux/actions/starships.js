@@ -20,6 +20,23 @@ export function markStarship(item) {
             }
         }
     };
+
+    /*
+    return (dispatch, getState) => {
+        const { starships: { lists: { main }} } = getState();
+
+        const nextMain = main.filter(id => id !== item.id);
+
+        dispatch({
+            type: actionTypes.UPDATE_RESOURCES,
+            lists: {
+                starships: {
+                    main: nextMain
+                }
+            }
+        });
+    }
+    */
 }
 
 export function readStarships(list) {
