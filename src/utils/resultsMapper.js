@@ -17,8 +17,13 @@ function extractId(item) {
 }
 
 export default function resultsMapper(response) {
-    return response.results.map(item => ({
-        ...item,
-        id: extractId(item)
-    }));
+    const { results, ...requestProperties } = response;
+
+    return {
+        requestProperties,
+        resources: results.map(item => ({
+            ...item,
+            id: extractId(item)
+        }))
+    };
 }

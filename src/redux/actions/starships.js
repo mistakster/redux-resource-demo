@@ -15,9 +15,7 @@ export function readStarships(list) {
         try {
             const response = await fetchApi('starships/');
 
-            dispatch(readListAction.succeeded({
-                resources: resultsMapper(response)
-            }));
+            dispatch(readListAction.succeeded(resultsMapper(response)));
         } catch (err) {
             dispatch(readListAction.failed({
                 error: err
