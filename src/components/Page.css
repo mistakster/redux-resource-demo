@@ -1,0 +1,9 @@
+.page {
+    display: flex;
+}
+
+.page__col {
+    width: 50%;
+    margin-left: 20px;
+    margin-right: 20px;
+}
