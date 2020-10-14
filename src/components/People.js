@@ -11,9 +11,16 @@ const peopleSelector = people => {
     console.log('getting people status');
     const status = getStatus(people, 'requests.readPeople||main.status');
 
+    const deleteStatuses = items.reduce((statuses, { id }) => {
+        statuses[id] = getStatus(people.meta[id], 'deleteStatus');
+
+        return statuses;
+    }, {});
+
     return {
         items,
-        status
+        status,
+        deleteStatuses
     };
 };
 
@@ -40,7 +47,7 @@ function useDeletePerson() {
 }
 
 const People = () => {
-    const { items, status } = useGetPeople();
+    const { items, status, deleteStatuses } = useGetPeople();
     const handleDelete = useDeletePerson();
 
     return (
@@ -48,6 +55,7 @@ const People = () => {
             title="People"
             items={items}
             status={status}
+            deleteStatuses={deleteStatuses}
             onDelete={handleDelete}
         />
     );

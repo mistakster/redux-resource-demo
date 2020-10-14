@@ -1,11 +1,12 @@
 import React, { memo } from 'react';
 import './List.css';
 
-const DeleteButton = ({ item, onDelete }) => (
+const DeleteButton = ({ item, disabled, onDelete }) => (
     <button
         type="button"
         className="list-item__button list-item__button_delete"
         onClick={() => onDelete(item)}
+        disabled={disabled}
     >
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -20,24 +21,37 @@ const DeleteButton = ({ item, onDelete }) => (
     </button>
 )
 
-const Item = memo(({ item, onDelete }) => {
+const Item = memo(({ item, isDeletePending, onDelete }) => {
     return (
         <div className="list-item">
             <span className="list-item__name">{item.name}</span>
             {onDelete && (
-                <DeleteButton item={item} onDelete={onDelete}/>
+                <DeleteButton
+                    item={item}
+                    disabled={isDeletePending}
+                    onDelete={onDelete}
+                />
             )}
         </div>
     );
 });
 
-const List = ({ items, status, onDelete }) => {
+function isPending(statuses, id) {
+    return !!(statuses && statuses[id] && statuses[id].pending);
+}
+
+const List = ({ items, status, deleteStatuses, onDelete }) => {
     if (status.succeeded) {
         if (items.length > 0) {
             return (
                 <div>
                     {items.map(item => (
-                        <Item key={item.id} item={item} onDelete={onDelete}/>
+                        <Item
+                            key={item.id}
+                            item={item}
+                            isDeletePending={isPending(deleteStatuses, item.id)}
+                            onDelete={onDelete}
+                        />
                     ))}
                 </div>
             );
@@ -57,13 +71,18 @@ const List = ({ items, status, onDelete }) => {
     );
 };
 
-const ListWrapper = memo(({ title, items, status, onDelete }) => {
+const ListWrapper = memo(({ title, items, status, deleteStatuses, onDelete }) => {
     console.log(`refresh ${title}`);
 
     return (
         <div>
             <h2>{title}</h2>
-            <List items={items} status={status} onDelete={onDelete}/>
+            <List
+                items={items}
+                status={status}
+                deleteStatuses={deleteStatuses}
+                onDelete={onDelete}
+            />
         </div>
     );
 });
