@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getResources, getStatus } from 'redux-resource';
 import { createSelector, createStructuredSelector } from 'reselect';
 import List from './List';
-import { readStarships } from '../redux/actions/starships';
+import { readStarships, markStarship } from '../redux/actions/starships';
 
 const starshipsSelector = createSelector(
     state => {
@@ -35,14 +35,25 @@ function useGetStarships() {
     return useSelector(starshipsSelector);
 }
 
+function useMarkStarship() {
+    const dispatch = useDispatch();
+
+    return useCallback((item) => {
+        dispatch(markStarship(item));
+    }, [dispatch]);
+}
+
 const Starships = () => {
     const { items, status } = useGetStarships();
+
+    const handleMark = useMarkStarship();
 
     return (
         <List
             title="Starships"
             items={items}
             status={status}
+            onMark={handleMark}
         />
     );
 };
