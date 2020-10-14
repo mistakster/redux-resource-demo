@@ -21,7 +21,7 @@ const DeleteButton = ({ item, disabled, onDelete }) => (
     </button>
 )
 
-const Item = memo(({ item, isDeletePending, onDelete }) => {
+const Item = ({ item, isDeletePending, onDelete }) => {
     return (
         <div className="list-item">
             <span className="list-item__name">{item.name}</span>
@@ -34,7 +34,9 @@ const Item = memo(({ item, isDeletePending, onDelete }) => {
             )}
         </div>
     );
-});
+};
+
+const MemoizedItem = memo(Item);
 
 function isPending(statuses, id) {
     return !!(statuses && statuses[id] && statuses[id].pending);
@@ -46,7 +48,7 @@ const List = ({ items, status, deleteStatuses, onDelete }) => {
             return (
                 <div>
                     {items.map(item => (
-                        <Item
+                        <MemoizedItem
                             key={item.id}
                             item={item}
                             isDeletePending={isPending(deleteStatuses, item.id)}
@@ -71,7 +73,7 @@ const List = ({ items, status, deleteStatuses, onDelete }) => {
     );
 };
 
-const ListWrapper = memo(({ title, items, status, deleteStatuses, onDelete }) => {
+const ListWrapper = ({ title, items, status, deleteStatuses, onDelete }) => {
     console.log(`refresh ${title}`);
 
     return (
@@ -85,6 +87,6 @@ const ListWrapper = memo(({ title, items, status, deleteStatuses, onDelete }) =>
             />
         </div>
     );
-});
+};
 
-export default ListWrapper;
+export default memo(ListWrapper);
