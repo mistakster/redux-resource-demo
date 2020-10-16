@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getResources, getStatus } from 'redux-resource';
 import List from './List';
 import { readPeople, deletePerson } from '../redux/actions/people';
-import DeleteButton from "./DeleteButton";
+import DeleteButton from './DeleteButton';
 
 const peopleSelector = people => {
     console.log('getting people items');
@@ -55,8 +55,9 @@ const People = () => {
     const { items, status, deleteStatuses } = useGetPeople();
     const handleDelete = useDeletePerson();
 
-    const renderAction = useCallback((item) => (
+    const renderAction = useCallback((item, className) => (
         <DeleteButton
+            className={className}
             item={item}
             disabled={isPending(deleteStatuses, item.id)}
             onDelete={handleDelete}

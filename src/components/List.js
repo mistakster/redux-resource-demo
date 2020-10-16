@@ -5,7 +5,7 @@ const Item = ({ item, renderAction }) => {
     return (
         <div className="list-item">
             <span className="list-item__name">{item.name}</span>
-            {renderAction && renderAction(item)}
+            {renderAction && renderAction(item, 'list-item__action')}
         </div>
     );
 };

@@ -1,0 +1,8 @@
+.mark-button__icon {
+    display: block;
+    fill: currentColor;
+}
+
+.mark-button_active .mark-button__icon {
+    fill: lightgreen;
+}

@@ -50,8 +50,9 @@ const Starships = () => {
 
     const title = `Starships (marked ${markedCount} ${markedCount % 10 === 1 && markedCount !== 11 ? 'item' : 'items'})`;
 
-    const renderAction = useCallback((item) => (
+    const renderAction = useCallback((item, className) => (
         <MarkButton
+            className={className}
             item={item}
             onMark={handleMark}
         />

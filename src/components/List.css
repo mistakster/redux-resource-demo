@@ -7,7 +7,7 @@
     white-space: nowrap;
 }
 
-.list-item__button {
+.list-item__action {
     background-color: transparent;
     text-decoration: none;
     outline: 0;
@@ -19,17 +19,8 @@
     border-radius: 0;
     font-family: inherit;
     font-size: 0.9rem;
-    -webkit-appearance: none;
+    appearance: none;
     line-height: 1;
     text-align: center;
     cursor: pointer;
-}
-
-.list-item__button-icon {
-    display: block;
-    fill: currentColor;
-}
-
-.list-item_marked .list-item__button-icon {
-    fill: lightgreen;
 }
