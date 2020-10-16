@@ -4,6 +4,7 @@ import { getResources, getStatus } from 'redux-resource';
 import { createSelector, createStructuredSelector } from 'reselect';
 import List from './List';
 import { readStarships, markStarship } from '../redux/actions/starships';
+import MarkButton from './MarkButton';
 
 const starshipsSelector = createSelector(
     state => state.starships,
@@ -49,12 +50,19 @@ const Starships = () => {
 
     const title = `Starships (marked ${markedCount} ${markedCount % 10 === 1 && markedCount !== 11 ? 'item' : 'items'})`;
 
+    const renderAction = useCallback((item) => (
+        <MarkButton
+            item={item}
+            onMark={handleMark}
+        />
+    ), [handleMark]);
+
     return (
         <List
             title={title}
             items={items}
             status={status}
-            onMark={handleMark}
+            renderAction={renderAction}
         />
     );
 };
