@@ -6,31 +6,17 @@ import List from './List';
 import { readStarships, markStarship } from '../redux/actions/starships';
 
 const starshipsSelector = createSelector(
-    state => {
-        console.log('computing content for the starships');
-
-        return state.starships;
-    },
+    state => state.starships,
     createStructuredSelector({
-        items: starships => {
-            console.log('getting starships items');
-
-            const items = getResources(starships, 'main');
-
-            return items.map(item => {
-                const { marked } = starships.meta[item.id];
-
-                return {
-                    ...item,
-                    marked: !!marked
-                };
-            });
-        },
-        status: starships => {
-            console.log('getting starships status');
-
-            return getStatus(starships, 'requests.readStarships||main.status');
-        }
+        items: starships => getResources(starships, 'main')
+            .map(item => ({
+                ...item,
+                marked: !!starships.meta[item.id].marked
+            })),
+        status: createSelector(
+            starships => starships.requests['readStarships||main'],
+            request => getStatus(request || {}, 'status')
+        )
     })
 );
 
