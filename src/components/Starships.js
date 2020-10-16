@@ -6,12 +6,16 @@ import List from './List';
 import { readStarships, markStarship } from '../redux/actions/starships';
 import MarkButton from './MarkButton';
 
-const starshipsSelector = createSelector(
+const starshipsSelectorFactory = listName => createSelector(
     state => state.starships,
     createStructuredSelector({
-        items: starships => getResources(starships, 'main'),
+        items: createSelector(
+            starships => starships.resources,
+            starships => starships.lists[listName],
+            (resources, list) => getResources({ resources }, list)
+        ),
         marked: createSelector(
-            starships => starships.lists.main,
+            starships => starships.lists[listName],
             starships => starships.meta,
             (list, meta) => {
                 if (!list) {
@@ -26,11 +30,13 @@ const starshipsSelector = createSelector(
             }
         ),
         status: createSelector(
-            starships => starships.requests['readStarships||main'],
+            starships => starships.requests[`readStarships||${listName}`],
             request => getStatus(request || {}, 'status')
         )
     })
 );
+
+const starshipsMainListSelector = starshipsSelectorFactory('main');
 
 function useGetStarships() {
     const dispatch = useDispatch();
@@ -39,7 +45,7 @@ function useGetStarships() {
         dispatch(readStarships('main'));
     }, [dispatch]);
 
-    return useSelector(starshipsSelector);
+    return useSelector(starshipsMainListSelector);
 }
 
 function useMarkStarship() {
