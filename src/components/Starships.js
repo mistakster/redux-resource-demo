@@ -15,7 +15,16 @@ const starshipsSelector = createSelector(
         items: starships => {
             console.log('getting starships items');
 
-            return getResources(starships, 'main');
+            const items = getResources(starships, 'main');
+
+            return items.map(item => {
+                const { marked } = starships.meta[item.id];
+
+                return {
+                    ...item,
+                    marked: !!marked
+                };
+            });
         },
         status: starships => {
             console.log('getting starships status');
@@ -48,9 +57,15 @@ const Starships = () => {
 
     const handleMark = useMarkStarship();
 
+    const markedCount = items
+        .filter(({ marked }) => marked)
+        .length;
+
+    const title = `Starships (marked ${markedCount} ${markedCount % 10 === 1 && markedCount !== 11 ? 'item' : 'items'})`;
+
     return (
         <List
-            title="Starships"
+            title={title}
             items={items}
             status={status}
             onMark={handleMark}

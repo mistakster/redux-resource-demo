@@ -4,7 +4,7 @@ import './List.css';
 const MarkButton = ({ item, onMark }) => (
     <button
         type="button"
-        className="list-item__button list-item__button_mark"
+        className={`list-item__button list-item__button_mark ${item.marked ? 'list-item_marked' : ''}`}
         onClick={() => onMark(item)}
     >
         <svg

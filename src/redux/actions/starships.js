@@ -3,40 +3,23 @@ import createActionCreators from 'redux-resource-action-creators';
 import resultsMapper from '../../utils/resultsMapper';
 
 export function markStarship(item) {
-    return {
-        type: actionTypes.UPDATE_RESOURCES,
-        resources: {
-            starships: {
-                [item.id]: {
-                    name: item.name.toUpperCase(),
-                }
-            }
-        },
-        meta: {
-            starships: {
-                [item.id]: {
-                    marked: true
-                }
-            }
-        }
-    };
-
-    /*
     return (dispatch, getState) => {
-        const { starships: { lists: { main }} } = getState();
+        const { meta } = getState().starships;
 
-        const nextMain = main.filter(id => id !== item.id);
+        const itemMeta = meta[item.id];
 
         dispatch({
             type: actionTypes.UPDATE_RESOURCES,
-            lists: {
+            meta: {
                 starships: {
-                    main: nextMain
+                    [item.id]: {
+                        ...itemMeta,
+                        marked: !itemMeta.marked
+                    }
                 }
             }
         });
     }
-    */
 }
 
 export function readStarships(list) {

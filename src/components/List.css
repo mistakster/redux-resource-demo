@@ -29,3 +29,7 @@
     display: block;
     fill: currentColor;
 }
+
+.list-item_marked .list-item__button-icon {
+    fill: lightgreen;
+}
