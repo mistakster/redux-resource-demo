@@ -9,11 +9,22 @@ import MarkButton from './MarkButton';
 const starshipsSelector = createSelector(
     state => state.starships,
     createStructuredSelector({
-        items: starships => getResources(starships, 'main')
-            .map(item => ({
-                ...item,
-                marked: !!starships.meta[item.id].marked
-            })),
+        items: starships => getResources(starships, 'main'),
+        marked: createSelector(
+            starships => starships.lists.main,
+            starships => starships.meta,
+            (list, meta) => {
+                if (!list) {
+                    return {};
+                }
+
+                return list.reduce((acc, id) => {
+                    acc[id] = !!meta[id].marked;
+
+                    return acc;
+                }, {});
+            }
+        ),
         status: createSelector(
             starships => starships.requests['readStarships||main'],
             request => getStatus(request || {}, 'status')
@@ -40,12 +51,13 @@ function useMarkStarship() {
 }
 
 const Starships = () => {
-    const { items, status } = useGetStarships();
+    const { items, marked, status } = useGetStarships();
 
     const handleMark = useMarkStarship();
 
-    const markedCount = items
-        .filter(({ marked }) => marked)
+    const markedCount = Object
+        .entries(marked)
+        .filter(tuple => tuple[1])
         .length;
 
     const title = `Starships (marked ${markedCount} ${markedCount % 10 === 1 && markedCount !== 11 ? 'item' : 'items'})`;
@@ -54,9 +66,10 @@ const Starships = () => {
         <MarkButton
             className={className}
             item={item}
+            active={marked[item.id]}
             onMark={handleMark}
         />
-    ), [handleMark]);
+    ), [handleMark, marked]);
 
     return (
         <List

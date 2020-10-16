@@ -2,10 +2,10 @@ import React from 'react';
 import classNames from 'classnames';
 import './MarkButton.css';
 
-const MarkButton = ({ className, item, onMark }) => (
+const MarkButton = ({ className, item, active, onMark }) => (
     <button
         type="button"
-        className={classNames(className, 'mark-button', { 'mark-button_active': item.marked })}
+        className={classNames(className, 'mark-button', { 'mark-button_active': active })}
         onClick={() => onMark(item)}
     >
         <svg
