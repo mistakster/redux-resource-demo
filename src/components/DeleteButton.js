@@ -1,11 +1,12 @@
 import React from 'react';
 import classNames from 'classnames';
+import './GenericAction.css';
 import './DeleteButton.css';
 
-const DeleteButton = ({ className, item, disabled, onDelete }) => (
+const DeleteButton = ({ item, disabled, onDelete }) => (
     <button
         type="button"
-        className={classNames(className, 'delete-button')}
+        className={classNames('generic-action', 'delete-button')}
         onClick={() => onDelete(item)}
         disabled={disabled}
     >

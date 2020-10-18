@@ -6,21 +6,3 @@
 .list-item__name {
     white-space: nowrap;
 }
-
-.list-item__action {
-    background-color: transparent;
-    text-decoration: none;
-    outline: 0;
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0;
-    padding: 8px 10px;
-    border: 1px solid transparent;
-    border-radius: 0;
-    font-family: inherit;
-    font-size: 0.9rem;
-    appearance: none;
-    line-height: 1;
-    text-align: center;
-    cursor: pointer;
-}

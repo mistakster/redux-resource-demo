@@ -1,15 +1,13 @@
 import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getResources, getStatus } from 'redux-resource';
+import { createCachedSelector } from 're-reselect';
 import List from './List';
 import { readPeople, deletePerson } from '../redux/actions/people';
 import DeleteButton from './DeleteButton';
 
 const peopleSelector = people => {
-    console.log('getting people items');
     const items = getResources(people, 'main');
-
-    console.log('getting people status');
     const status = getStatus(people, 'requests.readPeople||main.status');
 
     const deleteStatuses = items.reduce((statuses, { id }) => {
@@ -32,11 +30,7 @@ function useGetPeople() {
         dispatch(readPeople('main'));
     }, [dispatch]);
 
-    return peopleSelector(useSelector(({ people }) => {
-        console.log('computing content for the people');
-
-        return people;
-    }));
+    return peopleSelector(useSelector(({ people }) => people));
 }
 
 function useDeletePerson() {
@@ -47,6 +41,19 @@ function useDeletePerson() {
     }, [dispatch]);
 }
 
+const deleteButtonFactory = createCachedSelector(
+    (item) => item,
+    (item, disabled) => disabled,
+    (item, disabled, handleDelete) => handleDelete,
+    (item, disabled, handleDelete) => (
+        <DeleteButton
+            item={item}
+            disabled={disabled}
+            onDelete={handleDelete}
+        />
+    )
+)(item => item.id);
+
 function isPending(statuses, id) {
     return !!(statuses && statuses[id] && statuses[id].pending);
 }
@@ -55,13 +62,8 @@ const People = () => {
     const { items, status, deleteStatuses } = useGetPeople();
     const handleDelete = useDeletePerson();
 
-    const renderAction = useCallback((item, className) => (
-        <DeleteButton
-            className={className}
-            item={item}
-            disabled={isPending(deleteStatuses, item.id)}
-            onDelete={handleDelete}
-        />
+    const renderAction = useCallback((item) => (
+        deleteButtonFactory(item, isPending(deleteStatuses, item.id), handleDelete)
     ), [handleDelete, deleteStatuses]);
 
     return (
